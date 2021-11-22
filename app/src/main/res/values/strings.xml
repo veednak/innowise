@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Innowise</string>
+    <string name="title_home">ToDay</string>
+    <string name="title_dashboard">Forecast</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="today">ToDay</string>
+    <string name="city_to_day">City, XX</string>
+    <string name="weather_to_day">XX° | Weather</string>
+    <string name="humidity">Humidity</string>
+    <string name="precipitation">Unknown</string>
+    <string name="pressure">Pressure</string>
+    <string name="speed">Speed</string>
+    <string name="compass">Unknown</string>
+    <string name="temperature">Температура</string>
+    <string name="time">time</string>
+    <string name="Temp">Температура</string>
+    <string name="timevalue">timeValue</string>
+    <string name="weatherNow">weatherNow</string>
+</resources>
