@@ -1,5 +1,6 @@
 package com.example.testinnowise.ui.home
 
+import android.content.Intent
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
@@ -66,6 +67,7 @@ class HomeFragment : Fragment() {
 
         try {
             getWeather()
+            shareText()
         } catch (e: Exception) {
             Log.e("zxc", e.toString())
         }
@@ -113,6 +115,19 @@ class HomeFragment : Fragment() {
 
             })
 
+        }
+    }
+    private fun shareText() {
+        CoroutineScope(Dispatchers.IO).launch {
+            buttonShare.setOnClickListener {
+                val s = cityToDay.text
+                val a = weatherToDay.text
+                val shareIntent = Intent()
+                shareIntent.action = Intent.ACTION_SEND
+                shareIntent.type = "text/plain"
+                shareIntent.putExtra(Intent.EXTRA_TEXT, s.toString()+"\n"+a.toString())
+                startActivity(Intent.createChooser(shareIntent, "Share"))
+            }
         }
     }
 }

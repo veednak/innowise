@@ -16,4 +16,5 @@
     <string name="Temp">Температура</string>
     <string name="timevalue">timeValue</string>
     <string name="weatherNow">weatherNow</string>
+    <string name="share">share</string>
 </resources>
