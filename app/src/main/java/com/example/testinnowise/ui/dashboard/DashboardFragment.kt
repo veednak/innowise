@@ -18,6 +18,9 @@ import com.example.testinnowise.lat
 import com.example.testinnowise.lon
 import com.example.xxxx.JSONParse.RetrofitAPI2
 import kotlinx.android.synthetic.main.fragment_dashboard.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -57,55 +60,58 @@ class DashboardFragment : Fragment() {
     }
 
     private fun getWeather() {
-        var retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://api.openweathermap.org/data/2.5/")
-            .addConverterFactory(GsonConverterFactory.create()).build()
-        val retrofitAPI = retrofit.create(RetrofitAPI2::class.java)
-        val call: Call<Weather5DaysDataJSON?>? = retrofitAPI.getWeather(lat, lon)
-        call?.enqueue(object : Callback<Weather5DaysDataJSON?> {
-            override fun onResponse(
-                call: Call<Weather5DaysDataJSON?>?,
-                response: Response<Weather5DaysDataJSON?>
-            ) {
-                val postlist = response.body()
-                val weatherList = ArrayList<ModelWeather>()
-                for (element in postlist!!.list) {
-                    val f = DecimalFormat("##")
-                    val d = element.main.temp
-                    var temperature = f.format(d)
-                    if (temperature == "-0") {
-                        temperature = "0"
-                    }
-                    var img: Int
-                    if (element.weather.first().main == null) {
-                        img = R.drawable.ic_snow
-                    } else {
-                        img = EnumPrint.valueOf(element.weather.first().main.value).draw
-                    }
-                    weatherList.add(
-                        ModelWeather(
-                            temperature,
-                            element.dt_txt,
-                            if (element.weather.first().main == null) {
-                                "Snow"
-                            } else
-                                element.weather.first().main.value,
-                            img
-                        )
-                    )
-                }
-                list.layoutManager = LinearLayoutManager(requireContext())
-                list.adapter = MyAdapter(weatherList.toList())
-            }
 
-            override fun onFailure(call: Call<Weather5DaysDataJSON?>, t: Throwable) {
-                Toast.makeText(
-                    activity,
-                    "Ошибка загрузки данных,проверьте интернет подключение и перезапустите",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        })
+        CoroutineScope(Dispatchers.IO).launch {
+            var retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org/data/2.5/")
+                .addConverterFactory(GsonConverterFactory.create()).build()
+            val retrofitAPI = retrofit.create(RetrofitAPI2::class.java)
+            val call: Call<Weather5DaysDataJSON?>? = retrofitAPI.getWeather(lat, lon)
+            call?.enqueue(object : Callback<Weather5DaysDataJSON?> {
+                override fun onResponse(
+                    call: Call<Weather5DaysDataJSON?>?,
+                    response: Response<Weather5DaysDataJSON?>
+                ) {
+                    val postlist = response.body()
+                    val weatherList = ArrayList<ModelWeather>()
+                    for (element in postlist!!.list) {
+                        val f = DecimalFormat("##")
+                        val d = element.main.temp
+                        var temperature = f.format(d)
+                        if (temperature == "-0") {
+                            temperature = "0"
+                        }
+                        var img: Int
+                        if (element.weather.first().main == null) {
+                            img = R.drawable.ic_snow
+                        } else {
+                            img = EnumPrint.valueOf(element.weather.first().main.value).draw
+                        }
+                        weatherList.add(
+                            ModelWeather(
+                                temperature,
+                                element.dt_txt,
+                                if (element.weather.first().main == null) {
+                                    "Snow"
+                                } else
+                                    element.weather.first().main.value,
+                                img
+                            )
+                        )
+                    }
+                    list.layoutManager = LinearLayoutManager(requireContext())
+                    list.adapter = MyAdapter(weatherList.toList())
+                }
+
+                override fun onFailure(call: Call<Weather5DaysDataJSON?>, t: Throwable) {
+                    Toast.makeText(
+                        activity,
+                        "Ошибка загрузки данных,проверьте интернет подключение и перезапустите",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            })
+        }
     }
 }
 

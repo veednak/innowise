@@ -18,6 +18,9 @@ import com.example.testinnowise.lat
 import com.example.testinnowise.lon
 import com.example.xxxx.JSONParse.CurrentWeatherDataJson
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -69,48 +72,48 @@ class HomeFragment : Fragment() {
     }
 
     private fun getWeather() {
+        CoroutineScope(Dispatchers.IO).launch {
+
+            var retrofit: Retrofit = Retrofit.Builder()
+                .baseUrl("https://api.openweathermap.org/data/2.5/")
+                .addConverterFactory(GsonConverterFactory.create()).build()
+            val retrofitAPI = retrofit.create(RetrofitAPI::class.java)
+            val call: Call<CurrentWeatherDataJson?>? = retrofitAPI.getWeather(lat, lon)
 
 
-        var retrofit: Retrofit = Retrofit.Builder()
-            .baseUrl("https://api.openweathermap.org/data/2.5/")
-            .addConverterFactory(GsonConverterFactory.create()).build()
-        val retrofitAPI = retrofit.create(RetrofitAPI::class.java)
-        val call: Call<CurrentWeatherDataJson?>? = retrofitAPI.getWeather(lat, lon)
+            call?.enqueue(object : Callback<CurrentWeatherDataJson?> {
+                override fun onResponse(
+                    call: Call<CurrentWeatherDataJson?>?,
+                    response: Response<CurrentWeatherDataJson?>
+                ) {
+                    try {
+                        var post: CurrentWeatherDataJson =
+                            response.body() as CurrentWeatherDataJson
+                        weatherToDay.text = post.main.temp.toString() + " | " + post.weather[0].main
+                        textHumidity.text = post.main.humidity.toString() + "%"
+                        textPressure.text = post.main.pressure.toString() + "hPa"
+                        textSpeed.text = post.wind.speed.toString() + "km/h"
+                        cityToDay.text = post.name + ", " + post.sys.country
+                        imageGl.setImageResource(EnumPrint.valueOf(post.weather[0].main).draw)
 
-
-        call?.enqueue(object : Callback<CurrentWeatherDataJson?> {
-            override fun onResponse(
-                call: Call<CurrentWeatherDataJson?>?,
-                response: Response<CurrentWeatherDataJson?>
-            ) {
-                try {
-                    var post: CurrentWeatherDataJson =
-                        response.body() as CurrentWeatherDataJson
-                    weatherToDay.text =
-                        post.main.temp.toString() + " | " + post.weather[0].main
-                    textHumidity.text = post.main.humidity.toString() + "%"
-                    textPressure.text = post.main.pressure.toString() + "hPa"
-                    textSpeed.text = post.wind.speed.toString() + "km/h"
-                    cityToDay.text = post.name + ", " + post.sys.country
-                    imageGl.setImageResource(EnumPrint.valueOf(post.weather[0].main).draw)
-
-                } catch (e: Exception) {
-                    Log.e("catch json parse error", e.toString())
+                    } catch (e: Exception) {
+                        Log.e("catch json parse error", e.toString())
+                    }
                 }
-            }
 
 
-            override fun onFailure(call: Call<CurrentWeatherDataJson?>, t: Throwable) {
-                Toast.makeText(
-                    activity,
-                    "Ошибка загрузки данных,проверьте интернет подключение и перезапустите",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+                override fun onFailure(call: Call<CurrentWeatherDataJson?>, t: Throwable) {
+                    Toast.makeText(
+                        activity,
+                        "Ошибка загрузки данных,проверьте интернет подключение и перезапустите",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
 
 
-        })
+            })
 
+        }
     }
 }
 
