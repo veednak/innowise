@@ -1,4 +1,6 @@
-package com.example.testinnowise
+package com.example.testinnowise.Presenter
+
+import com.example.testinnowise.R
 
 enum class EnumPrint( val draw:Int) {
     Clear(R.drawable.ic_nicubunu_weather_symbols_sun),

@@ -1,4 +1,4 @@
-package com.example.testinnowise.JSONParse
+package com.example.testinnowise.Model.JSONParse
 
 import com.example.xxxx.JSONParse.CurrentWeatherDataJson
 import retrofit2.Call

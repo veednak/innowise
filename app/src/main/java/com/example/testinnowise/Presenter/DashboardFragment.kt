@@ -1,4 +1,4 @@
-package com.example.testinnowise.ui.dashboard
+package com.example.testinnowise.Presenter
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,11 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.innowise.Adapter.ModelWeather
 import com.example.innowise.Adapter.MyAdapter
 import com.example.innowise.JSON.Weather5DaysDataJSON
-import com.example.testinnowise.EnumPrint
 import com.example.testinnowise.R
 import com.example.testinnowise.databinding.FragmentDashboardBinding
 import com.example.testinnowise.lat
 import com.example.testinnowise.lon
+import com.example.testinnowise.View.ui.dashboard.DashboardViewModel
 import com.example.xxxx.JSONParse.RetrofitAPI2
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.coroutines.CoroutineScope

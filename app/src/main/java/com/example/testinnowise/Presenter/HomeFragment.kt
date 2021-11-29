@@ -1,4 +1,4 @@
-package com.example.testinnowise.ui.home
+package com.example.testinnowise.Presenter
 
 import android.content.Intent
 import android.location.LocationManager
@@ -12,11 +12,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.testinnowise.EnumPrint
-import com.example.testinnowise.JSONParse.RetrofitAPI
+import com.example.testinnowise.Model.JSONParse.RetrofitAPI
 import com.example.testinnowise.databinding.FragmentHomeBinding
 import com.example.testinnowise.lat
 import com.example.testinnowise.lon
+import com.example.testinnowise.View.ui.home.HomeViewModel
 import com.example.xxxx.JSONParse.CurrentWeatherDataJson
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.CoroutineScope
